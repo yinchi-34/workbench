@@ -66,6 +66,14 @@ Windows、WSL、Linux 各自是独立的主目录，每个环境各跑一次。
 
 见 [templates/algorithm/TEMPLATE.md](templates/algorithm/TEMPLATE.md)。业务仓库的 CI 只写几行调用本仓库的 go-ci.yml 并固定版本号；本仓库是私有的话，需要在 Settings → Actions → General → Access 里允许自己名下的其他仓库调用。
 
+## 脚本语言约定
+
+| 场景 | 语言 | 原因 |
+|------|------|------|
+| 同步、合并等要在 Windows/WSL/Linux 都跑的工具脚本 | Python（只用标准库） | 跨平台，自带 JSON/TOML 解析，好写测试 |
+| 部署脚本（例如以后 python-service 的部署） | sh | Linux 服务器和容器都自带，串命令最直接 |
+| 钩子、CI 里的单行命令 | sh | 由 lefthook / GitHub Actions 直接执行 |
+
 ## 开发
 
 ```sh
