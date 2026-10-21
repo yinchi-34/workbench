@@ -21,10 +21,22 @@ workbench/
 │   └── ci.yml                # 本仓库自身的 CI（同步脚本的测试）
 ├── mcp/servers.json          # 通用 MCP，统一用标准 mcpServers 格式
 ├── configs/targets.toml      # 各工具读取规则、技能、MCP 的位置
-├── scripts/sync.py           # 同步脚本（Python，只用标准库）
-├── tests/                    # 同步脚本的测试
+├── scripts/
+│   ├── bootstrap.py          # 新电脑初始化：检查工具、装 ccusage、配状态栏
+│   ├── sync.py               # 同步：分发基底层、技能、MCP
+│   └── merge.py              # 合并：检查全部通过才压缩合并（护栏第 3 层）
+├── tests/                    # 脚本的测试
 └── evals/                    # 测试点清单、基线记录
 ```
+
+## 新电脑初始化
+
+```sh
+python scripts/bootstrap.py --dry-run   # 先看会改什么
+python scripts/bootstrap.py
+```
+
+列出缺哪些工具和安装命令；用 npm 装 ccusage；在 `~/.claude/settings.json` 里加 `ccusage statusline` 状态栏（已有自定义状态栏时保留，`--force` 才替换）。
 
 ## 同步到各工具
 
@@ -65,6 +77,16 @@ Windows、WSL、Linux 各自是独立的主目录，每个环境各跑一次。
 ## 新建业务仓库
 
 见 [templates/algorithm/TEMPLATE.md](templates/algorithm/TEMPLATE.md)。业务仓库的 CI 只写几行调用本仓库的 go-ci.yml 并固定版本号；本仓库是私有的话，需要在 Settings → Actions → General → Access 里允许自己名下的其他仓库调用。
+
+## 合并 PR
+
+私有仓库免费版没有分支保护，不在网页上点合并，改用：
+
+```sh
+python <workbench 路径>/scripts/merge.py <PR 编号>
+```
+
+等 PR 的检查全部跑完；全部通过才压缩合并并删除分支，有失败、没有检查、还是草稿或已关闭都拒绝。需要已登录的 gh。
 
 ## 脚本语言约定
 

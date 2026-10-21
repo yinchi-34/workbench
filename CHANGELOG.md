@@ -3,3 +3,4 @@
 ## 未发布
 
 - 初始化仓库骨架：基底层、code-review 和 write-tests 技能（v1）、algorithm 模板、可复用 Go CI、MCP 配置（Context7）、Python 同步脚本、评测基线格式。
+- 新增 bootstrap.py（检查工具、装 ccusage、配状态栏）和 merge.py（检查全部通过才合并）。
