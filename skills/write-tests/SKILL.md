@@ -1,4 +1,11 @@
-# 写测试
+---
+name: write-tests
+description: 写测试时使用：给函数、模块或新功能补测试，修 bug 前写复现测试，把测试点变成表驱动测试。覆盖 Go（testing）和 Python（pytest）。
+---
+
+# 写测试（v1）
+
+默认只覆盖本次改动涉及的代码；仓库根目录 AGENTS.md 里有测试约定时以它为准。测试点可以从 workbench 的 evals/checklists/ 里挑。
 
 ## 步骤
 

@@ -7,10 +7,10 @@ Thumbs.db
 .idea/
 *.swp
 
-# 构建产物
-/sync
-/sync.exe
-/bin/
+# Python
+__pycache__/
+*.pyc
+.venv/
 
 # 本地私密内容
 .env

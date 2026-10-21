@@ -11,28 +11,28 @@ workbench/
 ├── base/                     # 基底层：所有仓库、所有助手共用
 │   ├── AGENTS.md             # 60 行以内的工程原则
 │   └── CLAUDE.md             # 一行 @AGENTS.md
-├── skills/                   # 通用技能
-│   └── coding/               # 写代码、审代码、写测试
-│       ├── SKILL.md
-│       └── references/       # review.md、tests.md，用到时才加载
+├── skills/                   # 通用技能，一个动作一个技能
+│   ├── code-review/SKILL.md  # 代码评审
+│   └── write-tests/SKILL.md  # 写测试
 ├── templates/
 │   └── algorithm/            # 刷题类 Go 仓库模板（说明见 TEMPLATE.md）
 ├── .github/workflows/
 │   ├── go-ci.yml             # 可复用 CI：gofmt、vet、golangci-lint、test；main 失败开 issue
-│   └── ci.yml                # 本仓库自身的 CI
+│   └── ci.yml                # 本仓库自身的 CI（同步脚本的测试）
 ├── mcp/servers.json          # 通用 MCP，统一用标准 mcpServers 格式
 ├── configs/targets.toml      # 各工具读取规则、技能、MCP 的位置
-├── scripts/sync/             # 同步脚本（Go）
+├── scripts/sync.py           # 同步脚本（Python，只用标准库）
+├── tests/                    # 同步脚本的测试
 └── evals/                    # 测试点清单、基线记录
 ```
 
 ## 同步到各工具
 
-需要 Go 1.24 以上。在本仓库根目录：
+需要 Python 3.11 以上，不用装任何依赖。在本仓库根目录：
 
 ```sh
-go run ./scripts/sync -dry-run   # 先看会改什么
-go run ./scripts/sync            # 执行
+python scripts/sync.py --dry-run   # 先看会改什么
+python scripts/sync.py             # 执行
 ```
 
 Windows、WSL、Linux 各自是独立的主目录，每个环境各跑一次。
@@ -69,5 +69,20 @@ Windows、WSL、Linux 各自是独立的主目录，每个环境各跑一次。
 ## 开发
 
 ```sh
-gofmt -l . && go vet ./... && golangci-lint run && go test ./...
+ruff check . && ruff format --check . && python -m unittest discover -s tests
 ```
+
+## 技能规划
+
+需求分析里列了 6 个通用技能，按“同一个要求说到第三次再沉淀”的原则逐个加：
+
+| 技能 | 状态 |
+|------|------|
+| code-review 代码评审 | 第一批 |
+| write-tests 写测试 | 第一批 |
+| clarify 需求澄清 | 待加 |
+| domain-model 领域建模（含数据建模） | 待加 |
+| define-contract 定义契约与非功能需求 | 待加 |
+| retro 复盘 | 待加 |
+
+只属于某个仓库的技能（例如 leetcode-go 的刷题技能）放在那个仓库里。

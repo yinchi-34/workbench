@@ -15,7 +15,7 @@
 | repo | 业务仓库 |
 | task | 任务，例如题目 slug |
 | implementer / reviewer | 实现方和审查方，例如 claude-code、codex-github |
-| skills | 用到的技能及版本，分号分隔，例如 `solve-problem@v1;coding@v1` |
+| skills | 用到的技能及版本，分号分隔，例如 `solve-problem@v1;write-tests@v1;code-review@v1` |
 | first_ci_pass | 第一次推送 CI 是否通过，yes/no |
 | rework_count | 审查后返工次数 |
 | minutes | 从开始到合并的总时长 |
