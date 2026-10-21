@@ -1,0 +1,71 @@
+# 可复用的 Go CI：只做 lint 和测试。
+# 业务仓库调用方式见 templates/algorithm/.github/workflows/ci.yml。
+name: go-ci
+
+on:
+  workflow_call:
+    inputs:
+      go-version-file:
+        description: 读取 Go 版本的文件
+        type: string
+        default: go.mod
+      golangci-lint-version:
+        description: golangci-lint 版本
+        type: string
+        default: v2.5.0
+      alert-on-main-failure:
+        description: main 上失败时自动开 issue（需要调用方授予 issues: write）
+        type: boolean
+        default: true
+
+permissions:
+  contents: read
+
+jobs:
+  lint-test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: ${{ inputs.go-version-file }}
+          cache: true
+
+      - name: gofmt
+        run: |
+          unformatted=$(gofmt -l .)
+          if [ -n "$unformatted" ]; then
+            echo "以下文件未格式化，请运行 gofmt -w：" >&2
+            echo "$unformatted" >&2
+            exit 1
+          fi
+
+      - name: go vet
+        run: go vet ./...
+
+      - uses: golangci/golangci-lint-action@v8
+        with:
+          version: ${{ inputs.golangci-lint-version }}
+
+      - name: go test
+        run: go test -race ./...
+
+  alert:
+    needs: lint-test
+    if: failure() && inputs.alert-on-main-failure && github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+    steps:
+      - name: 开 issue 告警
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          SHA: ${{ github.sha }}
+        run: |
+          gh issue create \
+            --title "main CI 失败：${SHA:0:7}" \
+            --body "推送到 main 的提交 ${SHA} 未通过 CI。运行记录：${RUN_URL}"

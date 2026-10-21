@@ -1,0 +1,49 @@
+# 同步目标：各工具读取规则、技能、MCP 的位置。
+# ~ 表示用户主目录；src 相对 workbench 根目录。
+# 路径以各工具当前文档为准，工具改了路径只改这里。
+
+# ---- 基底层 ----
+[[links]]
+tool = "claude"
+src = "base/AGENTS.md"
+dst = "~/.claude/AGENTS.md"
+
+[[links]]
+tool = "claude"
+src = "base/CLAUDE.md"   # 一行 @AGENTS.md
+dst = "~/.claude/CLAUDE.md"
+
+[[links]]
+tool = "codex"
+src = "base/AGENTS.md"
+dst = "~/.codex/AGENTS.md"
+
+[[links]]
+tool = "pi"
+src = "base/AGENTS.md"
+dst = "~/.pi/agent/AGENTS.md"
+
+# ---- 技能：skills/ 下每个含 SKILL.md 的目录链接到 dst/<技能名> ----
+[[skills]]
+tool = "claude"
+dst = "~/.claude/skills"
+
+[[skills]]
+tool = "codex,pi"        # 两者都读 ~/.agents/skills，待按 Codex 当前文档核对
+dst = "~/.agents/skills"
+
+# ---- MCP：由 mcp/servers.json 转换 ----
+[[mcp]]
+tool = "claude"
+format = "claude-cli"    # 用 claude mcp add-json --scope user 写入，不直接改文件
+state = "~/.claude.json" # 只读，用来判断是否已是最新
+
+[[mcp]]
+tool = "codex"
+format = "codex-toml"    # 只替换 [mcp_servers.<名字>] 表，其他设置保留
+path = "~/.codex/config.toml"
+
+[[mcp]]
+tool = "pi"
+format = "mcp-json"      # pi-mcp-adapter 读取的标准 mcpServers 格式，只合并同名条目
+path = "~/.config/mcp/mcp.json"

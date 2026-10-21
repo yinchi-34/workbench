@@ -1,0 +1,17 @@
+# 克隆后运行一次 lefthook install。不得用 --no-verify 跳过。
+pre-commit:
+  parallel: true
+  commands:
+    gofmt:
+      glob: "*.go"
+      run: test -z "$(gofmt -l {staged_files})" || { echo "未格式化：" >&2; gofmt -l {staged_files} >&2; exit 1; }
+    vet:
+      glob: "*.go"
+      run: go vet ./...
+    gitleaks:
+      run: gitleaks git --pre-commit --staged --redact --verbose
+
+pre-push:
+  commands:
+    test:
+      run: go test ./...

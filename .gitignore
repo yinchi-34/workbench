@@ -7,7 +7,11 @@ Thumbs.db
 .idea/
 *.swp
 
-# 本地草稿与私密内容
-*.local.md
-drafts/
+# 构建产物
+/sync
+/sync.exe
+/bin/
+
+# 本地私密内容
 .env
+*.local.*

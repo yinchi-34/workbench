@@ -1,0 +1,15 @@
+# workbench 自身的 CI：检查同步脚本。
+name: ci
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  go:
+    uses: ./.github/workflows/go-ci.yml

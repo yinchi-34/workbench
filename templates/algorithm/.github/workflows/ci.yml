@@ -1,0 +1,15 @@
+name: ci
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  go:
+    # 固定版本号，workbench 改动不会直接打断本仓库；升级时手动改标签。
+    uses: yinchi-34/workbench/.github/workflows/go-ci.yml@v0.1
