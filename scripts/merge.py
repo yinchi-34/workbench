@@ -7,10 +7,10 @@
 
     python <workbench>/scripts/merge.py 12            # 等检查跑完，全部通过就合并
     python <workbench>/scripts/merge.py 12 --dry-run  # 只检查，不合并
-    python <workbench>/scripts/merge.py 12 --allow-test-changes  # 已亲自看过被改的测试，允许合并
+    python <workbench>/scripts/merge.py 12 --allow-test-changes  # 已审阅被修改的测试，允许合并
 
-PR 修改或删除了已有的测试文件时拒绝合并，除非加 --allow-test-changes。新增测试文件不受影响。
-这是 fullstack 模板里 protect_tests.py 钩子的兜底：钩子拦不住用 Bash 改测试。
+PR 修改、删除或重命名已有测试文件时拒绝合并，除非指定 --allow-test-changes；新增测试文件不受影响。
+该检查是对 fullstack 模板中 protect_tests.py 钩子的补充，用于覆盖钩子无法拦截的 Bash 修改。
 """
 
 from __future__ import annotations
@@ -27,7 +27,7 @@ from pathlib import PurePosixPath
 CHECKS_PASSED = 0
 
 
-# 测试文件的判断规则，和 templates/fullstack/.claude/hooks/protect_tests.py 保持一致。
+# 测试文件的判断规则，与 templates/fullstack/.claude/hooks/protect_tests.py 保持一致。
 TEST_DIRS = {"__tests__", "testdata"}
 JS_EXTS = {".js", ".jsx", ".ts", ".tsx", ".mjs", ".cjs", ".vue"}
 
@@ -50,7 +50,7 @@ def is_test_file(path: str) -> bool:
 
 
 def changed_tests(files: list[dict]) -> list[str]:
-    """从 PR 文件列表（REST pulls/files 的格式）里挑出被修改、删除或重命名的已有测试文件。"""
+    """从 PR 文件列表（REST pulls/files 格式）中筛选出被修改、删除或重命名的已有测试文件。"""
     hits = []
     for f in files:
         status = f.get("status")
@@ -83,7 +83,7 @@ def merge(pr: str, repo: str | None, dry_run: bool, run: Runner = run_gh, allow_
         raise MergeRefused(f"PR {pr} 还是草稿，先标记为 Ready for review")
     print(f"PR {pr}：{info['title']}（{info['headRefName']}）")
 
-    # {owner}/{repo} 由 gh 按当前目录的仓库替换；--jq '.[]' 让多页结果每行一个对象。
+    # {owner}/{repo} 由 gh 替换为当前目录对应的仓库；--jq '.[]' 使分页结果每行输出一个对象。
     path = f"repos/{repo or '{owner}/{repo}'}/pulls/{info['number']}/files"
     files = run(["api", "--paginate", path, "--jq", ".[]"])
     if files.returncode != 0:
@@ -92,8 +92,8 @@ def merge(pr: str, repo: str | None, dry_run: bool, run: Runner = run_gh, allow_
     if tests:
         listing = "、".join(tests)
         if not allow_test_changes:
-            raise MergeRefused(f"PR 改动了已有的测试文件：{listing}。亲自看过后加 --allow-test-changes 再合并")
-        print(f"已确认的测试改动：{listing}")
+            raise MergeRefused(f"PR 修改了已有测试文件：{listing}。审阅后请加 --allow-test-changes 重新执行")
+        print(f"已确认的测试文件改动：{listing}")
 
     print("等待检查结果……")
     checks = run(["pr", "checks", pr, *repo_args, "--watch", "--fail-fast"])
@@ -116,7 +116,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("pr", help="PR 编号或链接")
     parser.add_argument("--repo", help="owner/name，默认取当前目录的仓库")
     parser.add_argument("--dry-run", action="store_true", help="只检查，不合并")
-    parser.add_argument("--allow-test-changes", action="store_true", help="已亲自看过被改的测试文件，允许合并")
+    parser.add_argument("--allow-test-changes", action="store_true", help="已审阅被修改的测试文件，允许合并")
     args = parser.parse_args(argv)
 
     if shutil.which("gh") is None:

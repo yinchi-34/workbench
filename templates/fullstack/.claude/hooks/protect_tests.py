@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
-"""PreToolUse 钩子：不让 agent 修改已经存在的测试文件，新建测试文件放行。
+"""PreToolUse 钩子：禁止 agent 修改已有的测试文件，允许新建测试文件。
 
-规划者要写新测试，所以新建放行；执行者想放宽断言、删掉用例，改的一定是已有文件，这里拦下。
-要改已有测试，由人自己改，或者人确认后临时关掉钩子。
+规划者需要编写新测试，因此不限制新建；放宽断言、删除用例等行为必然涉及已有文件，由本钩子拒绝。
+已有测试如需修改，由开发者本人操作，或经开发者确认后临时停用本钩子。
 
-只拦 Edit / Write / MultiEdit。用 Bash（sed -i 之类）改测试拦不住，由 workbench 的 merge.py 在合并时兜底。
-测试文件的判断规则和 workbench/scripts/merge.py 的 is_test_file 保持一致。
+仅拦截 Edit / Write / MultiEdit。通过 Bash（如 sed -i）进行的修改无法拦截，由 workbench 的 merge.py 在合并时检查。
+测试文件的判断规则与 workbench/scripts/merge.py 中的 is_test_file 保持一致。
 """
 
 from __future__ import annotations
@@ -41,7 +41,7 @@ def decide(event: dict, exists) -> str | None:
     if not exists(path, event.get("cwd") or "."):
         return None
     return (
-        f"{path} 是已有的测试文件，测试是验收标准，agent 不能改。认为测试写错了，在报告第一行写“需要确认”并说明理由。"
+        f"{path} 为已有测试文件。测试是验收标准，agent 不得修改；如认为测试有误，请在报告首行写明“需要确认”并说明理由。"
     )
 
 
@@ -54,7 +54,7 @@ def main() -> int:
     try:
         event = json.load(sys.stdin)
     except json.JSONDecodeError:
-        return 0  # 读不懂输入时放行，不因钩子自身问题卡住工作
+        return 0  # 输入无法解析时放行，避免钩子自身的问题阻塞正常工作
     reason = decide(event, _exists)
     if reason:
         out = {
