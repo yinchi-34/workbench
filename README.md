@@ -4,6 +4,80 @@
 
 原则：跨仓库复用的放这里，只属于某个项目的留在那个项目里；能被工具检查的交给工具，不写进提示词。
 
+## 架构
+
+```mermaid
+flowchart TB
+    subgraph WB["workbench 仓库"]
+        direction LR
+        base["基底层规则<br/><small>base/AGENTS.md</small>"]
+        skills["技能 skills/<br/><small>需求设计 · 调研 · 6 个协作角色<br/>代码评审 · 写测试</small>"]
+        mcp["MCP 配置<br/><small>mcp/servers.json</small>"]
+        lists["常见问题清单<br/><small>七层 · 按技术栈拆分</small>"]
+        tpl["仓库模板<br/><small>algorithm · fullstack</small>"]
+    end
+
+    sync{{"sync.py 同步<br/><small>链接 · 转换 MCP 格式</small>"}}
+
+    subgraph TOOLS["AI 编程助手（读取同一份规则与技能）"]
+        direction LR
+        cc["Claude Code"]
+        codex["Codex"]
+        pi["pi"]
+    end
+
+    subgraph BIZ["业务仓库"]
+        direction LR
+        rules["AGENTS.md · CLAUDE.md<br/><small>项目框架 · 规模估算</small>"]
+        docs["docs/<br/><small>specs · api-index · checklist</small>"]
+        agents["子 agent 配置<br/><small>预加载 role-* 技能</small>"]
+        hook["① 测试保护钩子<br/><small>禁止 agent 修改已有测试</small>"]
+        code["代码与测试"]
+    end
+
+    subgraph GATE["合并关口：PR 检查全部通过才合并"]
+        direction LR
+        ci["② CI<br/><small>lint · test</small>"]
+        merge["③ merge.py<br/><small>检查全过 · 测试改动须确认</small>"]
+        main[("main 分支")]
+    end
+
+    base & skills & mcp --> sync
+    sync --> cc & codex & pi
+    tpl -. "新建仓库时复制" .-> rules
+    lists -. "复制所用技术栈" .-> docs
+    cc ==> hook
+    codex == "按 spec 编写代码" ==> hook
+    pi ==> hook
+    hook ==> code
+    code == "提交 PR" ==> ci
+    ci ==> merge
+    merge == "压缩合并" ==> main
+
+    classDef wb fill:#e0e7ff,stroke:#4f46e5,stroke-width:1.5px,color:#1e1b4b
+    classDef tool fill:#dcfce7,stroke:#16a34a,stroke-width:1.5px,color:#14532d
+    classDef biz fill:#fef3c7,stroke:#d97706,stroke-width:1.5px,color:#451a03
+    classDef gate fill:#fee2e2,stroke:#dc2626,stroke-width:1.5px,color:#450a0a
+    classDef hub fill:#4f46e5,stroke:#312e81,stroke-width:2px,color:#ffffff
+    classDef sink fill:#1f2937,stroke:#111827,stroke-width:2px,color:#ffffff
+
+    class base,skills,mcp,lists,tpl wb
+    class cc,codex,pi tool
+    class rules,docs,agents,code biz
+    class hook,ci,merge gate
+    class sync hub
+    class main sink
+
+    style WB fill:#f5f7ff,stroke:#6366f1,stroke-width:2px,color:#312e81
+    style TOOLS fill:#f0fdf4,stroke:#22c55e,stroke-width:2px,color:#14532d
+    style BIZ fill:#fffbeb,stroke:#f59e0b,stroke-width:2px,color:#78350f
+    style GATE fill:#fef2f2,stroke:#ef4444,stroke-width:2px,color:#7f1d1d
+```
+
+- **配置分发**：规则、技能、MCP 只在本仓库维护一份，由 sync.py 链接或转换到各助手的目录，Claude Code、Codex、pi 读取的内容一致。
+- **按需复制**：仓库模板与常见问题清单在新建业务仓库时复制一次，清单只保留项目所用的技术栈。
+- **三道关口**：测试保护钩子在编写阶段禁止 agent 修改已有测试；CI 在 PR 上运行检查；merge.py 只在检查全部通过、且测试改动经人工确认后才合并。
+
 ## 目录
 
 ```
