@@ -2,6 +2,7 @@
 
 ## 未发布
 
+- 新增跨项目记录 evals/records/（进度汇总 progress.md、问题索引 issues.md）与 retro 技能（v1）：功能结束后将进度、问题与基线数据汇总到 workbench，通用问题经确认后回写常见问题清单。
 - 常见问题清单改为七层（功能、语言、框架与中间件、依赖、资源开销、测试本身、运行环境），移至 evals/checklists/common-issues/，语言层与框架层按技术栈拆分文件（Go、TypeScript、gin、Vue 3、数据库、Redis）。
 - spec 模板新增"资源开销估算"表（计算、网络、存储，单列大模型 token）；规模估算增加大模型 token 一项。
 - 角色技能与 requirements-design 支持启动参数（argument-hint 与 $ARGUMENTS），参数缺失时先向调用方确认。
