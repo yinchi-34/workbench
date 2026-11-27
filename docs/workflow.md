@@ -63,7 +63,7 @@
 
 ## Prompt 版本管理
 
-每个角色 prompt 与技能均标注版本号（标题中的 v1、v2 等），修改原因记录于 CHANGELOG.md。发现新问题或清单更新时，同步升级相关角色的 prompt。
+每个技能均标注版本号（标题中的 v1、v2 等），修改原因记录于 CHANGELOG.md。发现新问题或清单更新时，同步升级相关的角色技能。角色正文只在 role-* 技能中维护一份，Claude Code 子 agent 文件仅保留配置，以保证不同工具读取的内容一致。
 
 ## 相关文件
 
@@ -72,5 +72,5 @@
 | 需求设计技能及参考文件 | [skills/requirements-design/](../skills/requirements-design/SKILL.md) |
 | 新功能调研技能 | [skills/tech-research/](../skills/tech-research/SKILL.md) |
 | 常见问题清单 | [evals/checklists/common-issues.md](../evals/checklists/common-issues.md) |
-| 角色 prompt（通用版） | [prompts/generic/](../prompts/generic/) |
-| 角色 prompt（Claude Code 版）、接口影响索引、输出示例 | [templates/fullstack/](../templates/fullstack/TEMPLATE.md) |
+| 协作角色技能（Claude Code 与 Codex 共用） | [skills/role-*/](../skills/) |
+| Claude Code 子 agent 配置、接口影响索引、测试保护钩子 | [templates/fullstack/](../templates/fullstack/TEMPLATE.md) |

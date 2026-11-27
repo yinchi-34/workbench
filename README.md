@@ -16,8 +16,8 @@ workbench/
 │   ├── code-review/SKILL.md  # 代码评审
 │   ├── write-tests/SKILL.md  # 写测试
 │   ├── tech-research/SKILL.md # 新功能调研
-│   └── requirements-design/  # 需求设计：SKILL.md 与按功能类型区分的参考文件
-├── prompts/generic/          # 角色 prompt 通用版（不绑定工具）
+│   ├── requirements-design/  # 需求设计：SKILL.md 与按功能类型区分的参考文件
+│   └── role-*/               # 6 个协作角色：产品经理、负责人、规划者、执行者、审查者、专项审查者
 ├── templates/
 │   ├── algorithm/            # 刷题类 Go 仓库模板（说明见 TEMPLATE.md）
 │   └── fullstack/            # 前后端多 agent 协作模板：子 agent、接口索引、示例
@@ -84,7 +84,7 @@ Windows、WSL、Linux 各自是独立的主目录，每个环境各跑一次。
 新功能开发分为四步，细则见 [docs/workflow.md](docs/workflow.md)：
 
 1. **需求设计**：使用 [requirements-design](skills/requirements-design/SKILL.md) 技能，按功能类型选读参考文件，产出功能 spec，并根据规模选定轻量或完整协作档位。此前未实现过的功能先用 [tech-research](skills/tech-research/SKILL.md) 调研。
-2. **任务拆分与协作**：规划者拆分任务并先写验收测试，执行者实现，另一个 agent 审查；接口变更以契约和接口影响索引为准，关键节点须经人工确认。
+2. **任务拆分与协作**：规划者拆分任务并先写验收测试，执行者实现，另一个 agent 审查；各角色的职责以 role-* 技能为准，Claude Code 与 Codex 共用同一份。接口变更以契约和接口影响索引为准，关键节点须经人工确认。
 3. **问题处理**：记录 AI 出错的过程；测试文件禁止 agent 修改，由钩子与 merge.py 两层把关；同一问题连续两次未解决即转人工。
 4. **收尾验收**：检查测试、亲自操作、按[常见问题清单](evals/checklists/common-issues.md)逐项核对。
 
@@ -128,6 +128,7 @@ ruff check . && ruff format --check . && python -m unittest discover -s tests
 | write-tests 写测试 | 第一批 |
 | tech-research 新功能调研 | 第二批 |
 | requirements-design 需求设计 | 第二批 |
+| role-* 协作角色（6 个） | 第二批 |
 | clarify 需求澄清 | 暂由 requirements-design 覆盖，需要时再拆分 |
 | domain-model 领域建模（含数据建模） | 暂由 requirements-design 覆盖，需要时再拆分 |
 | define-contract 定义契约与非功能需求 | 暂由 requirements-design 覆盖，需要时再拆分 |
