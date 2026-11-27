@@ -2,6 +2,7 @@
 
 ## 未发布
 
+- 新增 requirements-design 技能（v1）：需求设计拆分为 SKILL.md 与参考文件（spec 模板、规模估算、数据增删改查 / 流式与长连接 / 前端交互三类功能、轻量与完整两档协作方式）；README 改为四步概述，docs/workflow.md 仅保留第二至四步细则；fullstack 模板的 spec 模板移入该技能。
 - fullstack 模板新增测试保护钩子 protect_tests.py：禁止 agent 修改已有测试文件，允许新建。
 - merge.py：PR 修改、删除或重命名已有测试文件时拒绝合并，指定 --allow-test-changes 方可合并。
 - 新增 AI 协作开发工作流：docs/workflow.md、常见问题清单、tech-research 技能（v1）、通用版角色 prompt（v2，流程为后端补充 API 与数据模型、前端反馈、双方交互一轮）、fullstack 模板（Claude Code 子 agent、负责人会话说明、spec 模板、接口影响索引、输出示例）。
