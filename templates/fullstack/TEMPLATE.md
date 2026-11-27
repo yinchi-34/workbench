@@ -21,7 +21,7 @@ lefthook.yml、CI、dependabot、PR 模板按语言从其他模板选取（Go �
 ## 使用方法
 
 1. 将本目录内容复制到业务仓库，同名文件逐一比对后合并。
-2. 将 workbench 的 `evals/checklists/common-issues.md` 复制为 `docs/checklist.md`。项目特有的问题追加在后面，通用问题回写至 workbench。
+2. 将 workbench 的 `evals/checklists/common-issues/` 复制为 `docs/checklist/`：通用层次的文件全部复制，语言层与框架层只复制项目使用的技术栈文件（规则见该目录的 README.md）。项目特有的问题追加在对应文件末尾，通用问题回写至 workbench。
 3. 填写 AGENTS.md：技术栈、目录结构、规模估算、不做的事。
 4. 在 GitHub Projects 中建立看板，设五列：待办、进行中、审查中、待确认、已完成。
 

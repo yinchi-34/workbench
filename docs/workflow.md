@@ -51,7 +51,7 @@
 1. **问题记录**：每遇到一个问题即时记录 AI 的输出、发现问题的方式及修复过程，存放于业务仓库的 docs/notes/。
 2. **测试持续失败**：测试文件须经开发者同意方可修改，以防 AI 放宽断言或跳过测试；同一问题连续两次未能解决时，暂停并转入人工审核。该约束同时由工具执行：钩子禁止 agent 修改已有测试文件，merge.py 在合并时再次检查（见 fullstack 模板的"测试保护"一节）。
 3. **代码可追溯**：执行者须在报告中注明代码行与功能点的对应关系，开发者据此进行整体抽查。
-4. **经验沉淀**：通用问题补充至 [常见问题清单](../evals/checklists/common-issues.md)，并同步更新相关角色的 prompt。
+4. **经验沉淀**：通用问题补充至 [常见问题清单](../evals/checklists/common-issues/README.md)，并同步更新相关角色的 prompt。
 
 ## 第四步：收尾验收
 
@@ -59,7 +59,7 @@
 
 1. **测试检查**：流程完整、覆盖全部需求、全部通过。
 2. **实际操作**：由开发者亲自完整使用一遍功能，包括异常路径。
-3. **清单检查**：按常见问题清单逐项核对。
+3. **清单检查**：按常见问题清单逐项核对，其中资源开销层须与 spec 中的估算对照。
 
 ## Prompt 版本管理
 
@@ -71,6 +71,6 @@
 |------|------|
 | 需求设计技能及参考文件 | [skills/requirements-design/](../skills/requirements-design/SKILL.md) |
 | 新功能调研技能 | [skills/tech-research/](../skills/tech-research/SKILL.md) |
-| 常见问题清单 | [evals/checklists/common-issues.md](../evals/checklists/common-issues.md) |
+| 常见问题清单（七层） | [evals/checklists/common-issues/](../evals/checklists/common-issues/README.md) |
 | 协作角色技能（Claude Code 与 Codex 共用） | [skills/role-*/](../skills/) |
 | Claude Code 子 agent 配置、接口影响索引、测试保护钩子 | [templates/fullstack/](../templates/fullstack/TEMPLATE.md) |

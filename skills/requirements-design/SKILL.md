@@ -21,7 +21,7 @@ description: 开发新功能前编写需求设计（spec）时使用。按功能
    | 前端交互 | 选区、浮层、拖拽、富文本渲染等交互逻辑 | [references/frontend-interaction.md](references/frontend-interaction.md) |
 
 3. **判断是否需要调研**。此前未实现过的功能，先使用 tech-research 技能完成调研；方案经用户讨论确定后，写入 spec 的"调研结论"一节。
-4. **编写 spec**。按 [references/spec-template.md](references/spec-template.md) 编写，保存至 docs/specs/<功能名>.md，并补充第 2 步参考文件中要求的内容。用户未明确说明的内容一律列入"待确认问题"。
+4. **编写 spec**。按 [references/spec-template.md](references/spec-template.md) 编写，保存至 docs/specs/<功能名>.md，并补充第 2 步参考文件中要求的内容。"资源开销估算"须从计算、网络、存储三方面填写，涉及大模型调用的单列 token 消耗。用户未明确说明的内容一律列入"待确认问题"。
 5. **划分阶段，确定验收测试**。将功能划分为可独立验证的阶段，每个阶段列出关键测试用例。
 6. **确定协作档位**。按下表选择，并阅读对应的参考文件，将所选档位写入 spec。
 
@@ -36,7 +36,7 @@ description: 开发新功能前编写需求设计（spec）时使用。按功能
 
 ## 交回内容
 
-首行为"需要确认"或"可以继续"，其后依次为：spec 文件路径、功能类型、所选协作档位及理由、待确认问题、对规模估算的影响。
+首行为"需要确认"或"可以继续"，其后依次为：spec 文件路径、功能类型、所选协作档位及理由、待确认问题、资源开销估算的结论。
 
 ## 规则
 

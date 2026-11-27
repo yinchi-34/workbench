@@ -86,7 +86,7 @@ Windows、WSL、Linux 各自是独立的主目录，每个环境各跑一次。
 1. **需求设计**：使用 [requirements-design](skills/requirements-design/SKILL.md) 技能，按功能类型选读参考文件，产出功能 spec，并根据规模选定轻量或完整协作档位。此前未实现过的功能先用 [tech-research](skills/tech-research/SKILL.md) 调研。
 2. **任务拆分与协作**：规划者拆分任务并先写验收测试，执行者实现，另一个 agent 审查；各角色的职责以 role-* 技能为准，Claude Code 与 Codex 共用同一份。接口变更以契约和接口影响索引为准，关键节点须经人工确认。
 3. **问题处理**：记录 AI 出错的过程；测试文件禁止 agent 修改，由钩子与 merge.py 两层把关；同一问题连续两次未解决即转人工。
-4. **收尾验收**：检查测试、亲自操作、按[常见问题清单](evals/checklists/common-issues.md)逐项核对。
+4. **收尾验收**：检查测试、亲自操作、按[常见问题清单](evals/checklists/common-issues/README.md)（功能、语言、框架与中间件、依赖、资源开销、测试本身、运行环境七层）逐项核对。
 
 ## 新建业务仓库
 
