@@ -83,10 +83,10 @@ flowchart TB
     style GATE fill:#fef2f2,stroke:#ef4444,stroke-width:2px,color:#7f1d1d
 ```
 
-- **配置分发**：规则、技能、MCP 只在本仓库维护一份，由 sync.py 链接或转换到各助手的目录，Claude Code、Codex、pi 读取的内容一致。
-- **按需复制**：仓库模板与常见问题清单在新建业务仓库时复制一次，清单只保留项目所用的技术栈。
-- **三道关口**：测试保护钩子在编写阶段禁止 agent 修改已有测试；CI 在 PR 上运行检查；merge.py 只在检查全部通过、且测试改动经人工确认后才合并。
-- **复盘汇总**：功能完成或中止后，retro 技能将各业务仓库的进度、问题与基线数据汇总到 workbench 的 evals/records/；其中的通用问题经确认后回写常见问题清单，供后续项目使用。
+- **Configuration distribution**: Rules, skills, and MCP settings are maintained in a single copy in this repository. `sync.py` links or converts them into each assistant's directory, so Claude Code, Codex, and pi all read identical content.
+- **Copy on demand**: Repository templates and the common-issues checklist are copied once when a project repository is created; the checklist keeps only the files for the project's technology stack.
+- **Three quality gates**: The test-protection hook prevents agents from modifying existing tests while code is being written; CI runs checks on every pull request; `merge.py` merges only after all checks pass and any test changes have been confirmed by a human.
+- **Retrospective aggregation**: When a feature is completed or abandoned, the `retro` skill aggregates progress, issues, and baseline data from each project repository into `evals/records/` in this repository. Issues that apply across projects are added to the common-issues checklist after confirmation, so later projects benefit from them.
 
 ## 目录
 
