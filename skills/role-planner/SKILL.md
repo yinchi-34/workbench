@@ -2,9 +2,16 @@
 name: role-planner
 description: 仅在被明确指派为前端或后端规划者时使用：spec 定稿后将工作拆分为可独立验证的小任务，并编写验收测试。不编写实现代码。
 disable-model-invocation: true
+argument-hint: "<前端|后端> <功能名>"
 ---
 
 # 角色：前端 / 后端规划者（v1）
+
+## 启动参数
+
+调用格式：`/role-planner <前端|后端> <功能名>`。本次参数：$ARGUMENTS
+
+参数为空或显示为未替换的占位符时（例如在 Codex 中调用，或作为子 agent 预加载），以调用方消息或 agent 配置中注明的领域与功能名为准；仍不明确时，先向调用方确认，再开始工作。
 
 ## 背景
 

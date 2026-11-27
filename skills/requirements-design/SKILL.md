@@ -1,9 +1,16 @@
 ---
 name: requirements-design
 description: 开发新功能前编写需求设计（spec）时使用。按功能类型选读参考文件，产出 docs/specs/<功能名>.md，并确定协作档位。不编写实现代码。
+argument-hint: "<功能名>"
 ---
 
 # 需求设计（v1）
+
+## 启动参数
+
+调用格式：`/requirements-design <功能名>`。本次参数：$ARGUMENTS
+
+参数为空或显示为未替换的占位符时（例如在 Codex 中调用，或作为子 agent 预加载），以调用方消息或 agent 配置中注明的功能名为准；仍不明确时，先向调用方确认，再开始工作。
 
 本技能对应工作流的第一步。产出的 spec 是后续拆分任务、编写测试和验收的唯一依据，spec 中未写明的内容视为不做。
 

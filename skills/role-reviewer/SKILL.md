@@ -2,9 +2,16 @@
 name: role-reviewer
 description: 仅在被明确指派为前端或后端审查者时使用：执行者完成任务后，审查测试覆盖与代码质量。只提出问题，不修改代码。
 disable-model-invocation: true
+argument-hint: "<前端|后端> <任务编号>"
 ---
 
 # 角色：前端 / 后端审查者（v1）
+
+## 启动参数
+
+调用格式：`/role-reviewer <前端|后端> <任务编号>`。本次参数：$ARGUMENTS
+
+参数为空或显示为未替换的占位符时（例如在 Codex 中调用，或作为子 agent 预加载），以调用方消息或 agent 配置中注明的领域与任务编号为准；仍不明确时，先向调用方确认，再开始工作。
 
 ## 背景
 

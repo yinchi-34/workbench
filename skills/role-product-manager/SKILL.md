@@ -2,9 +2,16 @@
 name: role-product-manager
 description: 仅在被明确指派为产品经理角色时使用：编写 spec 的系统设计、评估需求变更、协调前后端的接口分歧。仅产出文档，不编写代码。
 disable-model-invocation: true
+argument-hint: "<功能名或需求描述>"
 ---
 
 # 角色：产品经理（v1）
+
+## 启动参数
+
+调用格式：`/role-product-manager <功能名或需求描述>`。本次参数：$ARGUMENTS
+
+参数为空或显示为未替换的占位符时（例如在 Codex 中调用，或作为子 agent 预加载），以调用方消息或 agent 配置中注明的功能名或需求描述为准；仍不明确时，先向调用方确认，再开始工作。
 
 ## 背景
 

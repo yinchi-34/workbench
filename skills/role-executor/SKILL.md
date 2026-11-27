@@ -2,9 +2,16 @@
 name: role-executor
 description: 仅在被明确指派为前端或后端执行者时使用：实现单个任务，使已有的验收测试通过。每次仅处理一个任务。
 disable-model-invocation: true
+argument-hint: "<前端|后端> <任务编号>"
 ---
 
 # 角色：前端 / 后端执行者（v1）
+
+## 启动参数
+
+调用格式：`/role-executor <前端|后端> <任务编号>`。本次参数：$ARGUMENTS
+
+参数为空或显示为未替换的占位符时（例如在 Codex 中调用，或作为子 agent 预加载），以调用方消息或 agent 配置中注明的领域与任务编号为准；仍不明确时，先向调用方确认，再开始工作。
 
 ## 背景
 
