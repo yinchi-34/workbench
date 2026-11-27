@@ -4,7 +4,7 @@
 
 | 问题 | 位置 | 严重程度 | 理由 |
 |------|------|----------|------|
-| 没有测试 start_offset 大于 end_offset 的情况 | message_test.go | 应修 | spec 要求后端做基本的位置检查 |
-| 事务出错时只打了日志，没有返回错误 | message.go:72 | 阻塞 | 客户端会以为发送成功 |
+| 缺少 start_offset 大于 end_offset 的测试 | message_test.go | 应修 | spec 要求后端进行基本的位置检查 |
+| 事务出错时仅记录日志，未返回错误 | message.go:72 | 阻塞 | 客户端会误判为发送成功 |
 
-测试覆盖缺口：offset 为负数
+测试覆盖缺口：offset 为负数的情况
