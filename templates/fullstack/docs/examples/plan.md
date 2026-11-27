@@ -1,0 +1,11 @@
+### 任务 B3：发送消息接口支持引用
+- 目标：POST /api/conversations/:id/messages 可接收 quotes 数组并写入数据库
+- 涉及文件：internal/handler/message.go、internal/store/quote.go
+- 依赖：B1（quotes 表已建立）
+- 验收测试：internal/handler/message_test.go
+  - 携带 1 段合法引用 → 201，数据库中有 1 条 quote
+  - source_message_id 属于其他会话 → 400
+  - text 超过 2000 字 → 400
+  - quotes 超过 3 段 → 400
+- 专项审查：数据库、接口与安全
+- 注意事项：消息与引用须在同一事务中写入；校验引用归属时避免逐条查询数据库

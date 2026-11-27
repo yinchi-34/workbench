@@ -2,7 +2,7 @@
 
 | 目录 | 内容 |
 |------|------|
-| checklists/ | 测试点清单，按功能类型分（第一版只有算法类） |
+| checklists/ | 测试点清单（algorithm.md）和常见问题清单（common-issues.md，验收和专项审查用） |
 | prompts/results/ | 第 3 层：工作流质量记录 |
 
 ## 基线记录格式
