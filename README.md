@@ -1,92 +1,89 @@
 # workbench
 
+简体中文 | [English](README.en.md)
+
 个人 AI 编程工作流仓库：让 Claude Code、Codex、pi 在不同业务仓库里遵守同一套规则、技能和检查。
 
 原则：跨仓库复用的放这里，只属于某个项目的留在那个项目里；能被工具检查的交给工具，不写进提示词。
 
 ## 架构
 
+### 架构图
+
 ```mermaid
-flowchart TB
-    subgraph WB["workbench 仓库"]
-        direction LR
-        base["基底层规则<br/><small>base/AGENTS.md</small>"]
-        skills["技能 skills/<br/><small>需求设计 · 调研 · 6 个协作角色<br/>代码评审 · 写测试</small>"]
-        mcp["MCP 配置<br/><small>mcp/servers.json</small>"]
-        lists["常见问题清单<br/><small>七层 · 按技术栈拆分</small>"]
-        tpl["仓库模板<br/><small>algorithm · fullstack</small>"]
+%%{init: {"theme": "base", "themeVariables": {"primaryColor": "#ffffff", "primaryBorderColor": "#111111", "primaryTextColor": "#111111", "lineColor": "#111111", "clusterBkg": "#ffffff", "clusterBorder": "#111111", "edgeLabelBackground": "#ffffff", "fontFamily": "Helvetica, Arial, sans-serif"}}}%%
+flowchart LR
+    subgraph WB["workbench repo"]
+        direction TB
+        rules["Base rules"]
+        skills["Skills"]
+        mcp["MCP config"]
+        tpl["Templates"]
+        lists["Checklists"]
+        rec[("Records")]
     end
 
-    sync{{"sync.py 同步<br/><small>链接 · 转换 MCP 格式</small>"}}
+    sync[["sync.py"]]
 
-    subgraph TOOLS["AI 编程助手（读取同一份规则与技能）"]
-        direction LR
+    subgraph AS["AI assistants"]
+        direction TB
         cc["Claude Code"]
         codex["Codex"]
         pi["pi"]
     end
 
-    subgraph BIZ["业务仓库"]
-        direction LR
-        agents["子 agent 配置<br/><small>预加载 role-* 技能</small>"]
-        hook["① 测试保护钩子<br/><small>禁止 agent 修改已有测试</small>"]
-        code["代码与测试"]
-        docs["docs/<br/><small>specs · api-index · checklist</small>"]
-        rules["AGENTS.md · CLAUDE.md<br/><small>项目框架 · 规模估算</small>"]
+    subgraph PRJ["Project repo"]
+        direction TB
+        cfg["AGENTS.md, subagents"]
+        chk["Checklist"]
+        src["Specs, code, tests"]
     end
 
-    subgraph GATE["合并关口：PR 检查全部通过才合并"]
-        direction LR
-        ci["② CI<br/><small>lint · test</small>"]
-        merge["③ merge.py<br/><small>检查全过 · 测试改动须确认</small>"]
-        main[("main 分支")]
-    end
+    rules & skills & mcp --> sync
+    sync -- "link" --> cc & codex & pi
+    tpl -- "copy once" --> cfg
+    lists -- "copy once" --> chk
+    codex -- "read & write" --> src
+    src -- "retro" --> rec
 
-    subgraph REC["workbench 跨项目记录"]
-        direction LR
-        progress["进度汇总<br/><small>progress.md</small>"]
-        issues["问题索引<br/><small>issues.md</small>"]
-        baseline["基线数据<br/><small>baseline.csv</small>"]
-    end
-
-    base & skills & mcp --> sync
-    sync --> cc & codex & pi
-    tpl -. "新建仓库时复制" .-> rules
-    lists -. "复制所用技术栈" .-> docs
-    codex == "三个助手均按 spec 编写代码" ==> hook
-    hook ==> code
-    code == "提交 PR" ==> ci
-    ci ==> merge
-    merge == "合并" ==> main
-    main -. "retro 复盘汇总" .-> REC
-
-    classDef wb fill:#e0e7ff,stroke:#4f46e5,stroke-width:1.5px,color:#1e1b4b
-    classDef tool fill:#dcfce7,stroke:#16a34a,stroke-width:1.5px,color:#14532d
-    classDef biz fill:#fef3c7,stroke:#d97706,stroke-width:1.5px,color:#451a03
-    classDef gate fill:#fee2e2,stroke:#dc2626,stroke-width:1.5px,color:#450a0a
-    classDef hub fill:#4f46e5,stroke:#312e81,stroke-width:2px,color:#ffffff
-    classDef rec fill:#e0f2fe,stroke:#0284c7,stroke-width:1.5px,color:#082f49
-    classDef sink fill:#1f2937,stroke:#111827,stroke-width:2px,color:#ffffff
-
-    class base,skills,mcp,lists,tpl wb
-    class cc,codex,pi tool
-    class rules,docs,agents,code biz
-    class hook,ci,merge gate
-    class sync hub
-    class main sink
-    class progress,issues,baseline rec
-
-    style WB fill:#f5f7ff,stroke:#6366f1,stroke-width:2px,color:#312e81
-    style TOOLS fill:#f0fdf4,stroke:#22c55e,stroke-width:2px,color:#14532d
-    style BIZ fill:#fffbeb,stroke:#f59e0b,stroke-width:2px,color:#78350f
-    style REC fill:#f0f9ff,stroke:#0ea5e9,stroke-width:2px,color:#0c4a6e
-    style GATE fill:#fef2f2,stroke:#ef4444,stroke-width:2px,color:#7f1d1d
+    classDef default fill:#ffffff,stroke:#111111,stroke-width:1.2px,color:#111111
+    style WB fill:#ffffff,stroke:#111111,stroke-width:1.5px
+    style AS fill:#ffffff,stroke:#111111,stroke-width:1.5px
+    style PRJ fill:#ffffff,stroke:#111111,stroke-width:1.5px
 ```
 
-- **Configuration distribution**: Rules, skills, and MCP settings are maintained in a single copy in this repository. `sync.py` links or converts them into each assistant's directory, so Claude Code, Codex, and pi all read identical content.
-- **Copy on demand**: Repository templates and the common-issues checklist are copied once when a project repository is created; the checklist keeps only the files for the project's technology stack.
-- **Three quality gates**: The test-protection hook prevents agents from modifying existing tests while code is being written; CI runs checks on every pull request; `merge.py` merges only after all checks pass and any test changes have been confirmed by a human.
-- **Retrospective aggregation**: When a feature is completed or abandoned, the `retro` skill aggregates progress, issues, and baseline data from each project repository into `evals/records/` in this repository. Issues that apply across projects are added to the common-issues checklist after confirmation, so later projects benefit from them.
+### 流程图
+
+```mermaid
+%%{init: {"theme": "base", "themeVariables": {"primaryColor": "#ffffff", "primaryBorderColor": "#111111", "primaryTextColor": "#111111", "lineColor": "#111111", "clusterBkg": "#ffffff", "clusterBorder": "#111111", "edgeLabelBackground": "#ffffff", "fontFamily": "Helvetica, Arial, sans-serif"}}}%%
+flowchart TB
+    start(["New feature"])
+    spec["Write spec"]
+    ok1{"Approved?"}
+    plan["Plan tasks & write tests"]
+    code["Implement"]
+    review["Review"]
+    ok2{"Passed?"}
+    ci[["CI"]]
+    ok3{"Checks pass?"}
+    merge[["merge.py"]]
+    retro[["retro"]]
+    done(["Done"])
+    main[("main")]
+    rec[("Records")]
+
+    start --> spec --> ok1
+    ok1 -- "no" --> spec
+    ok1 -- "yes" --> plan --> code --> review --> ok2
+    ok2 -- "no" --> code
+    ok2 -- "yes" --> ci --> ok3
+    ok3 -- "no" --> code
+    ok3 -- "yes" --> merge --> retro --> done
+    merge -.-> main
+    retro -.-> rec
+
+    classDef default fill:#ffffff,stroke:#111111,stroke-width:1.2px,color:#111111
+```
 
 ## 目录
 
@@ -101,10 +98,11 @@ workbench/
 │   ├── write-tests/SKILL.md  # 写测试
 │   ├── tech-research/SKILL.md # 新功能调研
 │   ├── requirements-design/  # 需求设计：SKILL.md 与按功能类型区分的参考文件
+│   ├── retro/SKILL.md        # 复盘：汇总进度、问题与基线数据
 │   └── role-*/               # 6 个协作角色：产品经理、负责人、规划者、执行者、审查者、专项审查者
 ├── templates/
 │   ├── algorithm/            # 刷题类 Go 仓库模板（说明见 TEMPLATE.md）
-│   └── fullstack/            # 前后端多 agent 协作模板：子 agent、接口索引、示例
+│   └── fullstack/            # 前后端多 agent 协作模板：子 agent 配置、接口影响索引、测试保护钩子
 ├── .github/workflows/
 │   ├── go-ci.yml             # 可复用 CI：gofmt、vet、golangci-lint、test；main 失败开 issue
 │   └── ci.yml                # 本仓库自身的 CI（同步脚本的测试）
