@@ -1,0 +1,23 @@
+# workbench 自身的 CI：检查同步脚本。
+name: ci
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  python:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: astral-sh/ruff-action@v3
+      - run: ruff format --check .
+      - run: python -m unittest discover -s tests -v
