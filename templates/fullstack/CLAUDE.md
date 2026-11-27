@@ -7,7 +7,7 @@
 ### 会话分工
 
 - **产品经理会话**：每个功能首先开启该主会话，调用 product-manager 起草 spec。
-- **前端负责人会话、后端负责人会话**：各开一个，各使用一个 git worktree，首条消息要求其按 `.claude/leads/<frontend|backend>-lead.md` 工作。三个会话之间仅通过 docs/specs/ 与 docs/api-index.md 沟通。
+- **前端负责人会话、后端负责人会话**：各开一个，各使用一个 git worktree，首条消息调用 role-lead 技能（`/role-lead`），并告知领域（前端或后端）与功能名。三个会话之间仅通过 docs/specs/ 与 docs/api-index.md 沟通。
 
 ### 调用顺序
 

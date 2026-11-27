@@ -20,7 +20,7 @@
 
 ## 在 Claude Code 中的对应
 
-使用 fullstack 模板时，在单一会话中直接调用本领域的 planner、executor、reviewer 子 agent；不启用产品经理子 agent 与负责人会话，也无须建立 git worktree。
+使用 fullstack 模板时，在单一会话中直接调用本领域的 planner、executor、reviewer 子 agent（职责由 role-planner、role-executor、role-reviewer 技能定义）；不启用产品经理子 agent 与负责人会话，也无须建立 git worktree。
 
 ## 人工审核节点
 

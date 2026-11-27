@@ -41,7 +41,6 @@
 | docs/api-index.md | 接口影响索引，修改接口前须先查阅 |
 | docs/plans/<功能名>-<前端/后端>.md | 规划者拆出的任务列表 |
 | docs/checklist.md | 常见问题清单（复制自 workbench，项目特有的问题追加在后面） |
-| docs/examples/ | 各角色输出格式的示例 |
 | docs/notes/ | 问题记录：AI 的输出、发现问题的方式及修复过程 |
 
 ## 约定

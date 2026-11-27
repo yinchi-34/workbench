@@ -36,4 +36,4 @@
 
 ## 在 Claude Code 中的对应
 
-使用 fullstack 模板：产品经理会话调用 product-manager 子 agent；前后端负责人各开一个会话、各使用一个 git worktree，按 `.claude/leads/` 中的说明工作。详见模板的 CLAUDE.md 与 TEMPLATE.md。
+使用 fullstack 模板：产品经理会话调用 product-manager 子 agent；前后端负责人各开一个会话、各使用一个 git worktree，首条消息调用 role-lead 技能并告知领域。详见模板的 CLAUDE.md 与 TEMPLATE.md。
