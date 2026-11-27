@@ -11,11 +11,15 @@ workbench/
 ├── base/                     # 基底层：所有仓库、所有助手共用
 │   ├── AGENTS.md             # 60 行以内的工程原则
 │   └── CLAUDE.md             # 一行 @AGENTS.md
+├── docs/workflow.md          # AI 协作开发工作流：需求设计 → 拆任务 → 出错处理 → 验收
 ├── skills/                   # 通用技能，一个动作一个技能
 │   ├── code-review/SKILL.md  # 代码评审
-│   └── write-tests/SKILL.md  # 写测试
+│   ├── write-tests/SKILL.md  # 写测试
+│   └── tech-research/SKILL.md # 新功能调研
+├── prompts/generic/          # 角色 prompt 通用版（不绑定工具）
 ├── templates/
-│   └── algorithm/            # 刷题类 Go 仓库模板（说明见 TEMPLATE.md）
+│   ├── algorithm/            # 刷题类 Go 仓库模板（说明见 TEMPLATE.md）
+│   └── fullstack/            # 前后端多 agent 协作模板：子 agent、spec、接口索引、示例
 ├── .github/workflows/
 │   ├── go-ci.yml             # 可复用 CI：gofmt、vet、golangci-lint、test；main 失败开 issue
 │   └── ci.yml                # 本仓库自身的 CI（同步脚本的测试）
@@ -26,7 +30,7 @@ workbench/
 │   ├── sync.py               # 同步：分发基底层、技能、MCP
 │   └── merge.py              # 合并：检查全部通过才压缩合并（护栏第 3 层）
 ├── tests/                    # 脚本的测试
-└── evals/                    # 测试点清单、基线记录
+└── evals/                    # 测试点清单、常见问题清单、基线记录
 ```
 
 ## 新电脑初始化
@@ -74,9 +78,13 @@ Windows、WSL、Linux 各自是独立的主目录，每个环境各跑一次。
 
 转换到 Codex 时，`${VAR}` 形式的请求头变成 `env_http_headers`，`Authorization: Bearer ${VAR}` 变成 `bearer_token_env_var`。
 
+## 开发流程
+
+每个新功能按 [docs/workflow.md](docs/workflow.md) 走：需求设计（项目层规模估算 + 每个功能一份 spec）→ 按角色分层拆任务、测试先行、交叉审查 → 出错处理 → 收尾验收三步法。
+
 ## 新建业务仓库
 
-见 [templates/algorithm/TEMPLATE.md](templates/algorithm/TEMPLATE.md)。业务仓库的 CI 只写几行调用本仓库的 go-ci.yml 并固定版本号；本仓库是私有的话，需要在 Settings → Actions → General → Access 里允许自己名下的其他仓库调用。
+刷题类见 [templates/algorithm/TEMPLATE.md](templates/algorithm/TEMPLATE.md)，前后端多 agent 协作类见 [templates/fullstack/TEMPLATE.md](templates/fullstack/TEMPLATE.md)。业务仓库的 CI 只写几行调用本仓库的 go-ci.yml 并固定版本号；本仓库是私有的话，需要在 Settings → Actions → General → Access 里允许自己名下的其他仓库调用。
 
 ## 合并 PR
 
@@ -110,6 +118,7 @@ ruff check . && ruff format --check . && python -m unittest discover -s tests
 |------|------|
 | code-review 代码评审 | 第一批 |
 | write-tests 写测试 | 第一批 |
+| tech-research 新功能调研 | 第二批 |
 | clarify 需求澄清 | 待加 |
 | domain-model 领域建模（含数据建模） | 待加 |
 | define-contract 定义契约与非功能需求 | 待加 |
