@@ -2,8 +2,9 @@
 
 | 目录 | 内容 |
 |------|------|
-| checklists/ | 测试点清单（algorithm.md）和常见问题清单（common-issues.md，验收和专项审查用） |
-| prompts/results/ | 第 3 层：工作流质量记录 |
+| checklists/ | 测试点清单（algorithm.md）和常见问题清单（common-issues/，按七层组织，验收和专项审查用） |
+| prompts/results/ | 第 3 层：工作流质量记录（基线数据） |
+| records/ | 跨项目记录：进度汇总、问题索引，由 retro 技能维护（说明见 records/README.md） |
 
 ## 基线记录格式
 

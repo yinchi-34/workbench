@@ -2,6 +2,12 @@
 
 ## 未发布
 
+- 新增跨项目记录 evals/records/（进度汇总 progress.md、问题索引 issues.md）与 retro 技能（v1）：功能结束后将进度、问题与基线数据汇总到 workbench，通用问题经确认后回写常见问题清单。
+- 常见问题清单改为七层（功能、语言、框架与中间件、依赖、资源开销、测试本身、运行环境），移至 evals/checklists/common-issues/，语言层与框架层按技术栈拆分文件（Go、TypeScript、gin、Vue 3、数据库、Redis）。
+- spec 模板新增"资源开销估算"表（计算、网络、存储，单列大模型 token）；规模估算增加大模型 token 一项。
+- 角色技能与 requirements-design 支持启动参数（argument-hint 与 $ARGUMENTS），参数缺失时先向调用方确认。
+- 角色改为技能：新增 role-product-manager、role-lead、role-planner、role-executor、role-reviewer、role-specialist-reviewer（v1，合并原通用版 v2 与 Claude Code 版 v1 的正文），输出示例移入各技能的 references；fullstack 模板的子 agent 文件只保留配置并预加载对应技能；删除 prompts/generic、模板中的 .claude/leads 与 docs/examples。
+- 新增 requirements-design 技能（v1）：需求设计拆分为 SKILL.md 与参考文件（spec 模板、规模估算、数据增删改查 / 流式与长连接 / 前端交互三类功能、轻量与完整两档协作方式）；README 改为四步概述，docs/workflow.md 仅保留第二至四步细则；fullstack 模板的 spec 模板移入该技能。
 - fullstack 模板新增测试保护钩子 protect_tests.py：禁止 agent 修改已有测试文件，允许新建。
 - merge.py：PR 修改、删除或重命名已有测试文件时拒绝合并，指定 --allow-test-changes 方可合并。
 - 新增 AI 协作开发工作流：docs/workflow.md、常见问题清单、tech-research 技能（v1）、通用版角色 prompt（v2，流程为后端补充 API 与数据模型、前端反馈、双方交互一轮）、fullstack 模板（Claude Code 子 agent、负责人会话说明、spec 模板、接口影响索引、输出示例）。
