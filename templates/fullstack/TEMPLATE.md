@@ -23,7 +23,9 @@ lefthook.yml、CI、dependabot、PR 模板按语言从其他模板选取（Go �
 1. 将本目录内容复制到业务仓库，同名文件逐一比对后合并。
 2. 将 workbench 的 `evals/checklists/common-issues/` 复制为 `docs/checklist/`：通用层次的文件全部复制，语言层与框架层只复制项目使用的技术栈文件（规则见该目录的 README.md）。项目特有的问题追加在对应文件末尾，通用问题回写至 workbench。
 3. 填写 AGENTS.md：技术栈、目录结构、规模估算、不做的事。
-4. 在 GitHub Projects 中建立看板，设五列：待办、进行中、审查中、待确认、已完成。
+4. 在 GitHub Projects 中建立看板：待办、进行中、审查中、待确认、已完成；中止任务单独记录。看板映射规则以协作公共规则为准。
+5. 使用新增的 docs/project/tasks.md、decisions.md 与 docs/acceptance/_template.md 建立任务、批准与证据记录。
+6. 在总控主会话调用 `/role-project-manager <功能名>`；工具可用范围按该技能的 references/tools.md 核对。
 
 ## 测试保护
 
@@ -42,6 +44,17 @@ lefthook.yml、CI、dependabot、PR 模板按语言从其他模板选取（Go �
 
 ## 负责人不作为子 agent 的原因
 
-Claude Code 的子 agent 不能调用其他子 agent，运行结束后只能将结果交回主会话。负责人需要调用规划者、执行者和审查者，因此必须作为主会话运行：前后端各开一个会话，各使用一个 git worktree，首条消息以参数形式调用 role-lead 技能，例如 `/role-lead 后端 带引用发送消息`。产品经理会话与两个负责人会话之间仅通过 docs/specs/ 与 docs/api-index.md 沟通。
+Claude Code 的子 agent 不能调用其他子 agent，运行结束后只能将结果交回主会话。负责人需要调用规划者、执行者和审查者，因此必须作为主会话运行：前后端各开一个会话，各使用一个 git worktree，首条消息以参数形式调用 role-lead 技能，例如 `/role-lead 后端 带引用发送消息`。项目管理总控协调各会话；业务依据为 spec 与 api-index，报告统一格式。项目管理登记已批准文档提交，各 worktree 通过 Git 同步该版本，不能假设同名文件自动共享。
 
 该分工尚未经过实际项目验证，首次使用时根据实际情况调整，并将改动记录于 workbench 的 CHANGELOG.md。
+
+## 新增项目管理文件
+
+| 文件 | 用途 |
+|------|------|
+| docs/project/tasks.md | 任务、依赖、当前状态和外部看板映射 |
+| docs/project/decisions.md | 实际人工决定及批准版本 |
+| docs/acceptance/_template.md | 每条 AC 的验证证据与最终验收 |
+
+公共交接格式位于同步后的 role-project-manager/references/protocol.md，各角色技能都引用它。无需复制公共规则到多个角色中。
+项目管理角色作为主会话运行，因此不增加 .claude/agents 中的子 agent 配置。

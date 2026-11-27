@@ -2,6 +2,10 @@
 
 ## 未发布
 
+- 新增 role-project-manager（v1）：项目管理总控主会话、人工决策、任务与阻塞跟踪、统一交接及 MCP/CLI 工具约定；不包含后台调度或新的 MCP 服务。
+- 六个已有角色技能升级 v2：统一报告、按行为拆任务、独立验收证据、明确审查结论及专项补充触发；requirements-design 升级 v2，验收标准增加 AC 编号与验证方法。
+- fullstack 模板新增任务账本、人工决策记录、AC 验收记录，更新编排与多 worktree 的契约版本交接规则。
+
 - 新增跨项目记录 evals/records/（进度汇总 progress.md、问题索引 issues.md）与 retro 技能（v1）：功能结束后将进度、问题与基线数据汇总到 workbench，通用问题经确认后回写常见问题清单。
 - 常见问题清单改为七层（功能、语言、框架与中间件、依赖、资源开销、测试本身、运行环境），移至 evals/checklists/common-issues/，语言层与框架层按技术栈拆分文件（Go、TypeScript、gin、Vue 3、数据库、Redis）。
 - spec 模板新增"资源开销估算"表（计算、网络、存储，单列大模型 token）；规模估算增加大模型 token 一项。

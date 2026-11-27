@@ -217,3 +217,12 @@ The requirements analysis listed six general skills, added one at a time under t
 | retro (retrospective) | Batch 2 |
 
 Skills that belong to a single repository (such as the problem-solving skill in leetcode-go) live in that repository.
+
+## Project management coordinator
+
+After syncing skills and applying the fullstack template, invoke `/role-project-manager <feature>` in the project main session.
+The coordinator tracks tasks, handoffs, blockers and acceptance evidence; humans retain decisions on requirements, designs, priorities, plans and acceptance.
+Use `docs/project/tasks.md`, `docs/project/decisions.md` and `docs/acceptance/<feature>.md` in the business repository.
+All roles follow the [shared handoff protocol](skills/role-project-manager/references/protocol.md) and [tool integration contract](skills/role-project-manager/references/tools.md).
+The bundled MCP configuration only includes Context7. Project boards, PR/CI and session dispatch need available tools or separate configuration.
+This adds skills and templates, not a background scheduler or MCP server; validation with a real feature is still required.

@@ -10,7 +10,7 @@
 
 1. 每个阶段按前端、后端拆分为小任务，每个任务明确实现方式、涉及文件和验收测试。
 2. **按模型能力分工**：能力较强的模型负责分析、拆分任务和审查；执行模型负责实现。
-3. **测试先行**：规划者将验收测试写成测试文件，执行者的职责是使测试通过。
+3. **验收先行**：规划者关联 AC 编号，能自动化的先写测试，其余提供可重复操作或测量步骤；执行者对照需求实施并保存验证证据。
 4. **交叉审查**：测试本身同样需要审查，编写代码的 agent 不得审查自己的产出。
 
 角色设置取决于第一步确定的协作档位：轻量档位见 [team-lite.md](../skills/requirements-design/references/team-lite.md)，完整档位见 [team-full.md](../skills/requirements-design/references/team-full.md)。
@@ -21,7 +21,7 @@
 
 - 列：待办、进行中、审查中、待确认、已完成
 - 每张卡片对应一个任务，并链接到对应的 spec 与任务说明
-- 卡片状态随流程更新；收到首行为"需要确认"的报告时，将卡片移至"待确认"
+- 项目管理维护 docs/project/tasks.md，按公共规则映射看板状态；待人工决定、待验收均进入“待确认”，只有人工验收后才进入“已完成”。
 
 ### 接口变更规则
 
@@ -43,17 +43,19 @@
 1. 需求确认：spec 定稿
 2. 接口契约变更
 3. 对测试文件的任何修改
-4. 同一问题连续两次未能解决
+4. 同一根因连续两次尝试无新增证据，或同一任务两轮审查未通过
 5. 最终验收
 
 ## 第三步：问题处理
 
 1. **问题记录**：每遇到一个问题即时记录 AI 的输出、发现问题的方式及修复过程，存放于业务仓库的 docs/notes/；复盘时由 retro 技能在 workbench 的问题索引中登记。
-2. **测试持续失败**：测试文件须经开发者同意方可修改，以防 AI 放宽断言或跳过测试；同一问题连续两次未能解决时，暂停并转入人工审核。该约束同时由工具执行：钩子禁止 agent 修改已有测试文件，merge.py 在合并时再次检查（见 fullstack 模板的"测试保护"一节）。
+2. **测试持续失败**：测试文件须经开发者同意方可修改，以防 AI 放宽断言或跳过测试；同一根因连续两次尝试无新增证据时，暂停该问题并转入人工审核，不影响其他已批准工作。该约束同时由工具执行：钩子禁止 agent 修改已有测试文件，merge.py 在合并时再次检查（见 fullstack 模板的"测试保护"一节）。
 3. **代码可追溯**：执行者须在报告中注明代码行与功能点的对应关系，开发者据此进行整体抽查。
 4. **经验沉淀**：通用问题补充至 [常见问题清单](../evals/checklists/common-issues/README.md)，并同步更新相关角色的 prompt。
 
 ## 第四步：收尾验收与复盘
+
+项目管理按 [公共规则](../skills/role-project-manager/references/protocol.md) 汇总 docs/acceptance/<功能名>.md，逐项关联 AC、版本、环境与实际证据。不能以执行者的完成声明或 CI 绿灯替代人工验收。
 
 验收分为三步：
 
@@ -85,3 +87,16 @@
 | 常见问题清单（七层） | [evals/checklists/common-issues/](../evals/checklists/common-issues/README.md) |
 | 协作角色技能（Claude Code 与 Codex 共用） | [skills/role-*/](../skills/) |
 | Claude Code 子 agent 配置、接口影响索引、测试保护钩子 | [templates/fullstack/](../templates/fullstack/TEMPLATE.md) |
+
+## 项目管理与统一交接
+
+项目管理为总控，产品经理分析需求，负责人提出设计，规划者拆分任务，执行者实现，审查者独立验证；需求、方案、优先级、计划、契约、测试调整与最终验收由人工决定。
+已批准工作按依赖推进，缺少授权或证据时提交具体决策请求，不能重复索取相同授权。
+
+- [项目管理技能](../skills/role-project-manager/SKILL.md)：启动和恢复、交接与阻塞跟踪。
+- [公共规则](../skills/role-project-manager/references/protocol.md)：统一报告字段、状态、批准与多 worktree 的版本同步。
+- [MCP 工具约定](../skills/role-project-manager/references/tools.md)：查询、授权写入、失败回读与无工具降级。
+- [任务账本](../templates/fullstack/docs/project/tasks.md)、[决策记录](../templates/fullstack/docs/project/decisions.md)、[验收模板](../templates/fullstack/docs/acceptance/_template.md)：复制到业务仓库使用。
+
+轻量档位由当前主会话承担总控，不增加会话。完整档位以项目管理主会话协调前后端负责人；跨会话派发不可用时由人工转交报告。
+本次补充的是技能、模板和工具约定，未实现后台调度器或新的 MCP 服务。

@@ -99,7 +99,7 @@ workbench/
 │   ├── tech-research/SKILL.md # 新功能调研
 │   ├── requirements-design/  # 需求设计：SKILL.md 与按功能类型区分的参考文件
 │   ├── retro/SKILL.md        # 复盘：汇总进度、问题与基线数据
-│   └── role-*/               # 6 个协作角色：产品经理、负责人、规划者、执行者、审查者、专项审查者
+│   └── role-*/               # 7 个协作角色：项目管理、产品经理、负责人、规划者、执行者、审查者、专项审查者
 ├── templates/
 │   ├── algorithm/            # 刷题类 Go 仓库模板（说明见 TEMPLATE.md）
 │   └── fullstack/            # 前后端多 agent 协作模板：子 agent 配置、接口影响索引、测试保护钩子
@@ -167,7 +167,7 @@ Windows、WSL、Linux 各自是独立的主目录，每个环境各跑一次。
 
 1. **需求设计**：使用 [requirements-design](skills/requirements-design/SKILL.md) 技能，按功能类型选读参考文件，产出功能 spec，并根据规模选定轻量或完整协作档位。此前未实现过的功能先用 [tech-research](skills/tech-research/SKILL.md) 调研。
 2. **任务拆分与协作**：规划者拆分任务并先写验收测试，执行者实现，另一个 agent 审查；各角色的职责以 role-* 技能为准，Claude Code 与 Codex 共用同一份。接口变更以契约和接口影响索引为准，关键节点须经人工确认。
-3. **问题处理**：记录 AI 出错的过程；测试文件禁止 agent 修改，由钩子与 merge.py 两层把关；同一问题连续两次未解决即转人工。
+3. **问题处理**：记录 AI 出错的过程；测试文件禁止 agent 修改，由钩子与 merge.py 两层把关；同一根因连续两次尝试无新增证据或同一任务两轮审查未通过即转人工。
 4. **收尾验收与复盘**：检查测试、亲自操作、按[常见问题清单](evals/checklists/common-issues/README.md)（功能、语言、框架与中间件、依赖、资源开销、测试本身、运行环境七层）逐项核对；随后用 [retro](skills/retro/SKILL.md) 技能将进度、问题与基线数据汇总到 [evals/records/](evals/records/README.md)，各项目的记录集中查看。
 
 ## 新建业务仓库
@@ -210,10 +210,27 @@ ruff check . && ruff format --check . && python -m unittest discover -s tests
 | write-tests 写测试 | 第一批 |
 | tech-research 新功能调研 | 第二批 |
 | requirements-design 需求设计 | 第二批 |
-| role-* 协作角色（6 个） | 第二批 |
+| role-* 协作角色（7 个） | 第二批 |
 | clarify 需求澄清 | 暂由 requirements-design 覆盖，需要时再拆分 |
 | domain-model 领域建模（含数据建模） | 暂由 requirements-design 覆盖，需要时再拆分 |
 | define-contract 定义契约与非功能需求 | 暂由 requirements-design 覆盖，需要时再拆分 |
 | retro 复盘 | 第二批 |
 
 只属于某个仓库的技能（例如 leetcode-go 的刷题技能）放在那个仓库里。
+
+## 项目管理总控：快速开始
+
+规则同步完成、fullstack 模板合并到业务仓库后，在该仓库主会话调用：
+
+```text
+/role-project-manager 用户登录
+```
+
+Codex 等不替换参数的工具中，直接说明“使用 role-project-manager，管理用户登录功能”。
+总控先核对项目现状和批准记录，协调需求、设计、计划、执行、审查及验收；人工保留决策权。
+任务、人工决定、AC 验收证据分别保存在 docs/project/tasks.md、docs/project/decisions.md、docs/acceptance/<功能名>.md。
+
+[公共交接规则](skills/role-project-manager/references/protocol.md) 统一各角色的格式、状态与版本依据；
+[工具约定](skills/role-project-manager/references/tools.md) 说明 MCP/CLI 的能力、授权和降级方式。
+现有 MCP 配置只含 Context7；看板、PR/CI 与会话工具需使用环境已有能力或另行接入。
+本仓库提供技能和模板，不包含后台调度器；本次流程尚待真实功能验证。
