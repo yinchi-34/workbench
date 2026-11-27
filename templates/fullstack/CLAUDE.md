@@ -7,11 +7,12 @@
 ### 会话分工
 
 - **产品经理会话**：每个功能首先开启该主会话，调用 product-manager 起草 spec。
-- **前端负责人会话、后端负责人会话**：各开一个，各使用一个 git worktree，首条消息要求其按 `.claude/leads/<frontend|backend>-lead.md` 工作。三个会话之间仅通过 docs/specs/ 与 docs/api-index.md 沟通。
+- **前端负责人会话、后端负责人会话**：各开一个，各使用一个 git worktree，首条消息以参数形式调用 role-lead 技能，例如 `/role-lead 后端 带引用发送消息`。三个会话之间仅通过 docs/specs/ 与 docs/api-index.md 沟通。
 
 ### 调用顺序
 
-1. 新需求 → product-manager 编写 spec 的系统设计 → 提交人工审核，确认后继续
+1. 新需求 → product-manager 按 requirements-design 技能编写 spec 的系统设计，并确定协作档位 → 提交人工审核，确认后继续
+   - 档位为轻量时：不启用负责人会话，在当前会话中直接执行第 3 至 6 步
 2. 后端负责人补充 API 设计与数据模型并更新 api-index → 前端负责人填写"前端反馈" → 双方交互一轮 → 提交人工审核
 3. 各负责人调用本领域的 planner 拆分任务、编写验收测试 → 任务列表提交人工审阅
 4. 每个任务 → 对应的 executor → 对应的 reviewer
