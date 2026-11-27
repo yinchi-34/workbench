@@ -10,7 +10,8 @@
 | CLAUDE.md | `@AGENTS.md` + Claude Code 的多 agent 编排规则 | 复制一次 |
 | .claude/agents/ | 11 个子 agent：产品经理、前后端规划者 / 执行者 / 审查者、4 个后端专项审查 | 复制一次 |
 | .claude/leads/ | 前后端负责人的会话说明（不是子 agent，见下） | 复制一次 |
-| .claude/settings.json | 禁止助手推 main、禁止 --no-verify | 复制一次 |
+| .claude/settings.json | 禁止助手推 main、禁止 --no-verify；挂上测试保护钩子 | 复制一次 |
+| .claude/hooks/protect_tests.py | PreToolUse 钩子：已有测试文件不让 agent 改，新建放行 | 复制一次 |
 | docs/specs/_template.md | 每个功能的 spec 模板 | 复制一次 |
 | docs/api-index.md | 接口影响索引 | 复制一次 |
 | docs/examples/ | 各角色输出的样板，prompt 里按路径引用 | 复制一次 |
@@ -24,6 +25,15 @@ lefthook.yml、CI、dependabot、PR 模板按语言从其他模板拿（Go 部�
 2. 复制 workbench 的 `evals/checklists/common-issues.md` 到 `docs/checklist.md`。项目特有的坑加在后面，通用的坑回写 workbench。
 3. 填 AGENTS.md：技术栈、目录、规模估算、不做的事。
 4. 在 GitHub Projects 建看板，五列：待办、进行中、审查中、等我确认、已完成。
+
+## 测试保护
+
+两层，后一层兜前一层：
+
+1. **钩子**（protect_tests.py）：agent 用 Edit / Write 改已有测试文件时直接拒绝；新建测试文件放行，因为规划者要写。用 Bash 改（sed -i 之类）拦不住。
+2. **合并检查**（workbench 的 merge.py）：PR 修改、删除或重命名了已有测试文件就拒绝合并，亲自看过后加 `--allow-test-changes` 才合。
+
+要改已有测试时由人自己改。Windows 原生环境没有 `python3` 命令的，把 settings.json 里的 `python3` 改成 `python`。
 
 ## 为什么负责人不是子 agent
 
