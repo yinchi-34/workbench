@@ -4,6 +4,8 @@
 
 适用于前后端分离、按 [docs/workflow.md](../../docs/workflow.md) 进行多 agent 协作开发的仓库。首个使用场景为划词引用聊天应用（Go + Vue 3）。
 
+spec 模板不在本模板中，由 [requirements-design](../../skills/requirements-design/SKILL.md) 技能提供，经 sync.py 同步至各助手。模板中的角色适用于完整协作档位；轻量档位只使用本领域的 planner、executor、reviewer，见该技能的 references/team-lite.md。
+
 | 文件 | 作用 | 继承方式 |
 |------|------|----------|
 | AGENTS.md | 仓库层规则：项目框架、规模估算、不做的事，`<!-- -->` 处由项目填写 | 复制一次 |
@@ -12,7 +14,6 @@
 | .claude/leads/ | 前后端负责人的会话工作说明（不是子 agent，原因见下文） | 复制一次 |
 | .claude/settings.json | 禁止助手推送 main、禁止 --no-verify，并配置测试保护钩子 | 复制一次 |
 | .claude/hooks/protect_tests.py | PreToolUse 钩子：禁止 agent 修改已有测试文件，允许新建 | 复制一次 |
-| docs/specs/_template.md | 功能 spec 模板 | 复制一次 |
 | docs/api-index.md | 接口影响索引 | 复制一次 |
 | docs/examples/ | 各角色输出格式的示例，角色 prompt 按路径引用 | 复制一次 |
 | docs/notes/ | 问题记录 | 复制一次 |
